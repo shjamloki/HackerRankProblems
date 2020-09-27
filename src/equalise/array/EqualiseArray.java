@@ -8,16 +8,16 @@ public class EqualiseArray {
 	
 	// Complete the equalizeArray function below.
     static int equalizeArray(int[] arr) {
-    	long result = Arrays.stream(arr)
+    /*	long result = Arrays.stream(arr)
     	           .boxed()
     	           .collect(Collectors.groupingBy(i->i,Collectors.counting()))
     	           .values()
     	           .stream()
     	           .max(Comparator.comparingLong(i->i))
-    	           .orElseThrow(RuntimeException::new);
+    	           .orElseThrow(RuntimeException::new); 
     	
-    	return (int) (arr.length - result); 
-    	/*int len = arr.length;
+    	return (int) (arr.length - result);  */
+    	int len = arr.length;
 		int aux[] = new int[101];
 		for (int i = 0; i < len; i++) {
 			int index = arr[i];
@@ -25,7 +25,7 @@ public class EqualiseArray {
 		}
 
 		int maxFreqCount = getMaxFreqCount(aux);
-		return len - maxFreqCount; */
+		return len - maxFreqCount; 
 	}
     
     private static int getMaxFreqCount(int[] aux) {
