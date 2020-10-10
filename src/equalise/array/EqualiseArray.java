@@ -1,13 +1,17 @@
 package equalise.array;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Collectors;
-
 public class EqualiseArray {
+	
+	/**
+	 * python -3
+	 * 
+	 * def equalizeArray(arr):
+	 *  return len(arr)-max(collections.Counter(arr).values())
+	 */
 	
 	// Complete the equalizeArray function below.
     static int equalizeArray(int[] arr) {
+    // java - 8 solutions 
     /*	long result = Arrays.stream(arr)
     	           .boxed()
     	           .collect(Collectors.groupingBy(i->i,Collectors.counting()))
