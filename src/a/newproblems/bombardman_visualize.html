@@ -1,0 +1,185 @@
+
+Skip to content
+All gists
+Back to GitHub
+@shjamloki
+@guillermogotre
+guillermogotre/helper.html
+Created 3 years ago • Report abuse
+
+0
+
+    0
+
+Code
+Revisions 1
+HackerRank - The Bomberman Game / Helper
+helper.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        td{
+            border: 1px black solid;
+            width: 20px;
+            height: 20px;
+            background-color: lightgreen;
+            text-align: center;
+        }
+        td.bomb{
+            background-color: lightcoral;
+        }
+    </style>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.slim.js"
+            integrity="sha256-tA8y0XqiwnpwmOIl3SGAcFl2RvxHjA8qp0+1uCGmRmg="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="controllers">
+    <label>Rows <input type="text" id="rows"></label>
+    <label>Columns <input type="text" id="columns"></label>
+    <button id="reset">Reset</button>
+</div>
+<div id="content">
+
+</div>
+<button id="button">Go!</button>
+
+<script>
+    //Generate bombs
+    var iter = 0;
+    var matrix = [];
+    let rows = 3;
+    let columns = 4;
+
+    function emptyMatrix(){
+        matrix.dele
+        for(var i=0; i<rows; i++){
+            matrix[i] = [];
+            for(var j=0; j<columns; j++){
+                matrix[i][j] = 0;
+            }
+        }
+    };
+
+    function tdOnClick(){
+        var td = $(this);
+        var j = td.index();
+        var i = td.parent().index();
+        td.toggleClass('bomb');
+        if(td.hasClass('bomb')) {
+            matrix[i][j] = 3;
+            td.html('3');
+        }
+        else {
+            matrix[i][j] = 0;
+            td.html('0');
+        }
+    }
+
+    function drawMatrix(){
+        var table = $("<table></table>");
+        for(var i=0; i< rows; i++){
+            var tableRow = $("<tr></tr>");
+            for(var j=0; j<columns; j++){
+                var tableData = $(`<td>${matrix[i][j]}</td>`);
+                tableData.click(tdOnClick);
+                if(matrix[i][j] !== 0)
+                    tableData.addClass('bomb');
+                tableRow.append(tableData);
+            }
+            table.append(tableRow);
+        }
+        $("#content").append(`<h3>${iter}</h3>`).append(table);
+    }
+
+    function getNeigh(i,j){
+        let res = [];
+        if(i-1 >= 0)
+            res.push([i-1,j]);
+        else
+            res.push(undefined);
+        if(i+1 < rows)
+            res.push([i+1,j]);
+        else
+            res.push(undefined);
+        if(j-1 >= 0)
+            res.push([i,j-1]);
+        else
+            res.push(undefined);
+        if(j+1 < columns)
+            res.push([i,j+1]);
+        else
+            res.push(undefined);
+        //console.log(res);
+        return res;
+    }
+
+    function updateMatrix(){
+        let newMatrix = [];
+        //Generate the empty matrix
+        for(let i=0; i<rows; i++){
+            newMatrix.push([]);
+            for(let j=0; j<columns; j++){
+                newMatrix[i].push(undefined);
+            }
+        }
+        for(let i=0; i<rows; i++){
+            for(let j=0; j<columns; j++){
+                if(matrix[i][j] == 0)
+                    newMatrix[i][j] = 0;
+                else{
+                    let count = matrix[i][j] - 1;
+                    if(count === 0) {
+                        newMatrix[i][j] = 0;
+                        for (pos of getNeigh(i, j)) {
+                            if (pos !== undefined) {
+                                //console.log(pos);
+                                newMatrix[pos[0]][pos[1]] = 0;
+                            }
+                        }
+                    }
+                    else if(newMatrix[i][j] === undefined){
+                        newMatrix[i][j] = count;
+                    }
+                }
+            }
+        }
+        matrix = newMatrix;
+    }
+
+    function fillMatrix(){
+        for(let i=0; i<rows; i++){
+            for (let j=0; j<columns; j++){
+                if(matrix[i][j] === 0)
+                    matrix[i][j] = 3;
+            }
+        }
+    }
+    emptyMatrix();
+    $('#button').click(function(){
+        iter++;
+        updateMatrix();
+       if((iter != 0) && ((iter % 2) == 0))
+           fillMatrix();
+       drawMatrix();
+    });
+
+    $('#reset').click(function(){
+        rows = parseInt($("#rows").val());
+        columns = parseInt($("#columns").val());
+        console.log("RESET",rows,columns);
+        $("#content").empty();
+        iter = 0;
+        emptyMatrix();
+        drawMatrix();
+    });
+    $("#rows").val(rows);
+    $("#columns").val(columns);
+    drawMatrix();
+</script>
+</body>
+</html>
