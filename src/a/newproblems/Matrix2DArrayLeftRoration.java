@@ -28,13 +28,31 @@ public class Matrix2DArrayLeftRoration {
 		List<Integer> line2 = new ArrayList<>();
 		List<Integer> line3 = new ArrayList<>();
 		List<Integer> line4 = new ArrayList<>();
+		List<Integer> line5 = new ArrayList<>();
+		List<Integer> line6 = new ArrayList<>();
+		List<Integer> line7 = new ArrayList<>();
+		List<Integer> line8 = new ArrayList<>();
 		List<List<Integer>> matrix = new ArrayList<>();
 		line1.add(1);line1.add(2);line1.add(3);line1.add(4);
+		line1.add(11);line1.add(22);line1.add(33);line1.add(44);line1.add(333);line1.add(444);
 		line2.add(5);line2.add(6);line2.add(7);line2.add(8);
+		line2.add(55);line2.add(66);line2.add(77);line2.add(88);line2.add(777);line2.add(888);
 		line3.add(9);line3.add(10);line3.add(11);line3.add(12);
+		line3.add(99);line3.add(101);line3.add(111);line3.add(112);line3.add(1111);line3.add(1112);
 		line4.add(13);line4.add(14);line4.add(15);line4.add(16);
-		matrix.add(line1);matrix.add(line2);matrix.add(line3);matrix.add(line4);
-		matrixRotation(matrix, 1);
+		line4.add(131);line4.add(141);line4.add(151);line4.add(161);line4.add(1511);line4.add(1611);
+		line5.add(19);line5.add(20);line5.add(21);line5.add(22);
+		line5.add(191);line5.add(201);line5.add(211);line5.add(22);line5.add(2111);line5.add(2112);
+		line6.add(25);line6.add(26);line6.add(27);line6.add(28);
+		line6.add(251);line6.add(261);line6.add(271);line6.add(281);line6.add(2117);line6.add(2811);
+		line7.add(25);line7.add(26);line7.add(27);line7.add(28);
+		line7.add(252);line7.add(262);line7.add(272);line7.add(282);line7.add(2721);line7.add(2821);
+		line8.add(25);line8.add(26);line8.add(27);line8.add(28);
+		line8.add(253);line8.add(263);line8.add(273);line8.add(283);line8.add(2733);line8.add(2833);
+		matrix.add(line1);matrix.add(line2);matrix.add(line3);
+		matrix.add(line4);matrix.add(line5);matrix.add(line6);
+		matrix.add(line7);matrix.add(line8);
+		matrixRotation(matrix, 40);
 	}
 	
 	static void matrixRotation2(List<List<Integer>> matrix, int r) {
@@ -86,44 +104,56 @@ public class Matrix2DArrayLeftRoration {
 	// Complete the matrixRotation function below.
     static void matrixRotation(List<List<Integer>> matrix, int r) {
     	int layer = Math.min(matrix.size(),matrix.get(0).size())/2;
+    	//it works for all the scenarios
     	for(int i=0;i< layer;i++)
     	{
     			rotate(i,matrix,r);
     	}
+        for (List<Integer> list : matrix) {
+			for (Integer val : list) {
+				System.out.print(val+" ");
+			}
+			System.out.println();
+		}
 
     }
 	private static void rotate(int i, List<List<Integer>> matrix,int distance) {
-	// (i,i) -->(i,n-i-1) --> (n-i-1,n-i-1,1) --> (n-i-1,i) -->i,i)
+		//int [][] arr = new int [matrix.size()][matrix.get(0).size()];
+	// (i,i) -->(i,m-i-1) --> (n-i-1,n-i-1,1) --> (n-i-1,i) -->i,i)
 		int n = matrix.size();
-		Queue<String> test = new LinkedList<>();
-		for (int j=i;j<n-i;j++)
+		int m = matrix.get(0).size();
+		List<Integer> test = new LinkedList<>();
+		for (int j=i;j<m-i;j++)
 		{
-			test.add(""+i+","+j+" >"+matrix.get(i).get(j));
+			test.add(matrix.get(i).get(j));
 		}
 		for(int j=i+1;j<n-i;j++) {
-			test.add(""+j+","+(n-i-1)+" >"+matrix.get(j).get(n-i-1));
+			test.add(matrix.get(j).get(m-i-1));
 		}
-		for(int j=n-i-2;j>=i;j--) {
-			test.add(""+(n-i-1)+","+j+" >"+matrix.get(n-i-1).get(j));
+		for(int j=m-i-2;j>=i;j--) {
+			test.add(matrix.get(n-i-1).get(j));
 		}
 		for(int j=n-i-2;j>i;j--) {
-			test.add(""+j+","+i+" >"+matrix.get(j).get(i));
+			test.add(matrix.get(j).get(i));
 		}
-		System.out.println(test);
-		//Collections.rotate(test, -distance);
-		System.out.println("after rotate -> "+test);
-		System.out.println("----------");
-		for (String val : test) {
-			String []token = val.split(">");
-			System.out.print(Arrays.toString(val.split(">")));
-			String []indexes = token[0].split(",");
-			int iIndex = Integer.parseInt(indexes[0].trim());
-			int jIndex = Integer.parseInt(indexes[1].trim());
-			int newVal = Integer.parseInt(token[1].trim());
-			System.out.println("current value at "+iIndex+","+jIndex+" is ->"+
-			matrix.get(iIndex).get(jIndex)+"\n"
-					+ "it is going to be replaced by : "+newVal);
-			matrix.get(iIndex).set(jIndex,newVal);
+		distance %=test.size();
+		Collections.rotate(test, -distance);
+		for (int j=i;j<m-i;j++)
+		{
+			matrix.get(i).set(j,test.get(0));
+			test.remove(0);
+		}
+		for(int j=i+1;j<n-i;j++) {
+			matrix.get(j).set(m-i-1,test.get(0));
+			test.remove(0);
+		}
+		for(int j=m-i-2;j>=i;j--) {
+			matrix.get(n-i-1).set(j,test.get(0));
+			test.remove(0);
+		}
+		for(int j=n-i-2;j>i;j--) {
+			matrix.get(j).set(i,test.get(0));
+			test.remove(0);
 		}
 	}
 }
